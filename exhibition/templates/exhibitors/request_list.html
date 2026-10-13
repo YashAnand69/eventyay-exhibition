@@ -101,7 +101,59 @@
                             {% endwith %}
                         </td>
                         <td class="request-state-cell">
-                            <span data-request-state>{{ exhibition_request.get_state_display }}</span>
+                            {% if can_manage and exhibition_request.review_actions %}
+                                <div class="dropdown" data-request-state-actions>
+                                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span data-request-state>{{ exhibition_request.get_state_display }}</span> <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        {% if "approve" in exhibition_request.review_actions %}
+                                            <li>
+                                                <a href="#" class="request-action-btn request-action-approve" data-request-action="approve" data-request-code="{{ exhibition_request.code }}">
+                                                    <i class="fa fa-check"></i> {% trans "Approve" %}
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                        {% if "confirm" in exhibition_request.review_actions %}
+                                            <li>
+                                                <a href="#" class="request-action-btn request-action-confirm" data-request-action="confirm" data-request-code="{{ exhibition_request.code }}">
+                                                    <i class="fa fa-check-circle"></i> {% trans "Confirm for applicant" %}
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                        {% if "unconfirm" in exhibition_request.review_actions %}
+                                            <li>
+                                                <a href="#" class="request-action-btn request-action-unconfirm" data-request-action="unconfirm" data-request-code="{{ exhibition_request.code }}">
+                                                    <i class="fa fa-circle-o"></i> {% trans "Move back to accepted" %}
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                        {% if "reject" in exhibition_request.review_actions %}
+                                            <li>
+                                                <a href="#" class="request-action-btn request-action-reject" data-request-action="reject" data-request-code="{{ exhibition_request.code }}">
+                                                    <i class="fa fa-times"></i> {% trans "Reject" %}
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                        {% if "withdraw" in exhibition_request.review_actions %}
+                                            <li>
+                                                <a href="#" class="request-action-btn request-action-withdraw" data-request-action="withdraw" data-request-code="{{ exhibition_request.code }}">
+                                                    <i class="fa fa-undo"></i> {% trans "Withdraw" %}
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                        {% if "reopen" in exhibition_request.review_actions %}
+                                            <li>
+                                                <a href="#" class="request-action-btn request-action-reopen" data-request-action="reopen" data-request-code="{{ exhibition_request.code }}">
+                                                    <i class="fa fa-inbox"></i> {% trans "Reopen for review" %}
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            {% else %}
+                                <span data-request-state>{{ exhibition_request.get_state_display }}</span>
+                            {% endif %}
                             {% if exhibition_request.edited_after_acceptance %}
                                 {% trans "Edited after acceptance, see detail view for changes." as edited_hint %}
                                 <a class="request-edited-dot"
@@ -113,38 +165,6 @@
                         </td>
                         <td>{{ exhibition_request.updated|date:"SHORT_DATETIME_FORMAT" }}</td>
                         <td class="text-right request-row-actions" data-request-actions-cell>
-                            {% if can_manage %}
-                                {% if "approve" in exhibition_request.review_actions %}
-                                    <button type="button" class="btn btn-success btn-sm request-action-btn request-action-approve" data-request-action="approve" data-request-code="{{ exhibition_request.code }}" title="{% trans 'Approve' %}" data-toggle="tooltip">
-                                        <i class="fa fa-check"></i>
-                                    </button>
-                                {% endif %}
-                                {% if "confirm" in exhibition_request.review_actions %}
-                                    <button type="button" class="btn btn-success btn-sm request-action-btn request-action-confirm" data-request-action="confirm" data-request-code="{{ exhibition_request.code }}" title="{% trans 'Confirm for applicant' %}" data-toggle="tooltip">
-                                        <i class="fa fa-check-circle"></i>
-                                    </button>
-                                {% endif %}
-                                {% if "unconfirm" in exhibition_request.review_actions %}
-                                    <button type="button" class="btn btn-sm request-action-btn request-action-unconfirm" data-request-action="unconfirm" data-request-code="{{ exhibition_request.code }}" title="{% trans 'Move back to accepted' %}" data-toggle="tooltip">
-                                        <i class="fa fa-circle-o"></i>
-                                    </button>
-                                {% endif %}
-                                {% if "reject" in exhibition_request.review_actions %}
-                                    <button type="button" class="btn btn-danger btn-sm request-action-btn request-action-reject" data-request-action="reject" data-request-code="{{ exhibition_request.code }}" title="{% trans 'Reject' %}" data-toggle="tooltip">
-                                        <i class="fa fa-times"></i>
-                                    </button>
-                                {% endif %}
-                                {% if "withdraw" in exhibition_request.review_actions %}
-                                    <button type="button" class="btn btn-sm request-action-btn request-action-withdraw" data-request-action="withdraw" data-request-code="{{ exhibition_request.code }}" title="{% trans 'Withdraw' %}" data-toggle="tooltip">
-                                        <i class="fa fa-undo"></i>
-                                    </button>
-                                {% endif %}
-                                {% if "reopen" in exhibition_request.review_actions %}
-                                    <button type="button" class="btn btn-sm request-action-btn request-action-reopen" data-request-action="reopen" data-request-code="{{ exhibition_request.code }}" title="{% trans 'Reopen for review' %}" data-toggle="tooltip">
-                                        <i class="fa fa-inbox"></i>
-                                    </button>
-                                {% endif %}
-                            {% endif %}
                             <a class="btn btn-default btn-sm" href="{% url 'plugins:exhibition:request.detail' organizer=request.event.organizer.slug event=request.event.slug code=exhibition_request.code %}" title="{% trans 'View' %}" data-toggle="tooltip">
                                 <i class="fa fa-eye"></i>
                             </a>

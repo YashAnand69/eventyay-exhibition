@@ -160,39 +160,37 @@
             if (!config) {
                 return null
             }
-            var button = document.createElement('button')
-            button.type = 'button'
-            button.className = 'btn btn-sm request-action-btn ' + config.cls + (config.variant ? ' ' + config.variant : '')
+            var button = document.createElement('a')
+            button.href = '#'
+            button.className = 'request-action-btn ' + config.cls
             button.setAttribute('data-request-action', action)
             button.setAttribute('data-request-code', code)
-            button.setAttribute('data-toggle', 'tooltip')
             if (config.label) {
                 button.title = config.label
             }
             var icon = document.createElement('i')
             icon.className = 'fa ' + config.icon
             button.appendChild(icon)
+            button.appendChild(document.createTextNode(' ' + (config.label || '')))
             return button
         }
 
         function rebuildActions(row, result) {
-            var actionsCell = row.querySelector('[data-request-actions-cell]')
-            if (!actionsCell) {
+            var dropdown = row.querySelector('[data-request-state-actions]')
+            if (!dropdown) {
                 return
             }
-            actionsCell.querySelectorAll('[data-request-action]').forEach(function (button) {
-                button.remove()
-            })
-            var viewLink = actionsCell.querySelector('a')
+            var menu = dropdown.querySelector('.dropdown-menu')
+            menu.innerHTML = ''
             ;(result.actions || []).forEach(function (action) {
                 var button = buildActionButton(action, result.code)
                 if (button) {
-                    actionsCell.insertBefore(button, viewLink)
+                    var item = document.createElement('li')
+                    item.appendChild(button)
+                    menu.appendChild(item)
                 }
             })
-            if (window.jQuery) {
-                $(actionsCell).find('[data-toggle="tooltip"]').tooltip()
-            }
+            dropdown.querySelector('.dropdown-toggle').disabled = !menu.children.length
         }
 
         function rebuildCheckbox(row, result) {
@@ -347,6 +345,10 @@
         container.addEventListener('click', function (event) {
             var button = event.target.closest('[data-request-action]')
             if (!button) {
+                return
+            }
+            event.preventDefault()
+            if (button.disabled) {
                 return
             }
             var action = button.dataset.requestAction
