@@ -38,7 +38,9 @@ def test_state_actions_stay_in_state_dropdown(event, settings, state):
     row = BeautifulSoup(response.content, "html.parser").select_one(f'[data-request-row="{proposal.code}"]')
     assert row is not None
     state_cell = row.select_one(".request-state-cell")
-    assert [item["data-request-action"] for item in state_cell.select("[data-request-action]")] == actions
+    assert [
+        item["data-request-action"] for item in state_cell.select(".dropdown-menu [data-request-action]")
+    ] == actions
     assert not row.select_one("[data-request-actions-cell]").select("[data-request-action]")
     assert row.select_one("[data-request-actions-cell] a") is not None
     if actions:

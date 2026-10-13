@@ -116,9 +116,11 @@
 .request-state-cell .dropdown-menu .request-action-btn {
     border: 0;
     background: transparent;
+    color: #333;
 }
 
 .request-state-cell .dropdown-menu .request-action-btn:hover,
 .request-state-cell .dropdown-menu .request-action-btn:focus {
     background: #f5f5f5;
+    color: #333;
 }
