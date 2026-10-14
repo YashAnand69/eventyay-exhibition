@@ -20,6 +20,19 @@
             return
         }
 
+        window.jQuery(container).on('shown.bs.dropdown', '[data-request-state-actions]', function () {
+            this.classList.remove('dropup')
+            if (!window.matchMedia('(max-width: 767px)').matches) {
+                return
+            }
+            var menu = this.querySelector('.dropdown-menu').getBoundingClientRect()
+            var bounds = container.getBoundingClientRect()
+            var toggle = this.getBoundingClientRect()
+            if (menu.bottom > bounds.bottom && toggle.top - menu.height >= bounds.top) {
+                this.classList.add('dropup')
+            }
+        })
+
         var actionUrl = container.dataset.requestActionsUrl
         var csrfToken = getCookie('eventyay_csrftoken') || getCookie('csrftoken')
         var feedback = document.querySelector('[data-request-feedback]')
@@ -211,6 +224,10 @@
             var stateCell = row.querySelector('[data-request-state]')
             if (stateCell) {
                 stateCell.textContent = result.state_display
+            }
+            var stateContainer = row.querySelector('.request-state-cell')
+            if (stateContainer) {
+                stateContainer.dataset.requestStateValue = result.state
             }
             rebuildActions(row, result)
             rebuildCheckbox(row, result)

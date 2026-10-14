@@ -100,7 +100,7 @@
                                 {% endif %}
                             {% endwith %}
                         </td>
-                        <td class="request-state-cell">
+                        <td class="request-state-cell" data-request-state-value="{{ exhibition_request.state }}">
                             {% if can_manage and exhibition_request.review_actions %}
                                 <div class="dropdown" data-request-state-actions>
                                     <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
