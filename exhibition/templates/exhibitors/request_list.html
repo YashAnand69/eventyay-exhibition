@@ -6,6 +6,7 @@
 
 {% block custom_header %}
     {{ block.super }}
+    <link rel="stylesheet" href="{% static 'pretixcontrol/css/order-form-toggles.css' %}">
     <link rel="stylesheet" href="{% static 'exhibition/css/request-actions.css' %}">
     <link rel="stylesheet" href="{% static 'exhibition/css/list-controls.css' %}">
     <script defer src="{% static 'exhibition/js/list-filters.js' %}"></script>
@@ -102,54 +103,28 @@
                         </td>
                         <td class="request-state-cell" data-request-state-value="{{ exhibition_request.state }}">
                             {% if can_manage and exhibition_request.review_actions %}
-                                <div class="dropdown" data-request-state-actions>
-                                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <span data-request-state>{{ exhibition_request.get_state_display }}</span> <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu">
+                                <div class="required-status-wrapper request-state-select-wrapper" data-request-state-actions>
+                                    <select class="required-status-dropdown" data-request-state-select data-current="{{ exhibition_request.state }}" data-request-code="{{ exhibition_request.code }}" aria-label="{% trans 'Request state' %}">
+                                        <option value="" selected data-request-state>{{ exhibition_request.get_state_display }}</option>
                                         {% if "approve" in exhibition_request.review_actions %}
-                                            <li>
-                                                <a href="#" class="request-action-btn request-action-approve" data-request-action="approve" data-request-code="{{ exhibition_request.code }}">
-                                                    <i class="fa fa-check"></i> {% trans "Approve" %}
-                                                </a>
-                                            </li>
+                                            <option value="approve" class="request-action-approve" data-request-action="approve">{% trans "Approve" %}</option>
                                         {% endif %}
                                         {% if "confirm" in exhibition_request.review_actions %}
-                                            <li>
-                                                <a href="#" class="request-action-btn request-action-confirm" data-request-action="confirm" data-request-code="{{ exhibition_request.code }}">
-                                                    <i class="fa fa-check-circle"></i> {% trans "Confirm for applicant" %}
-                                                </a>
-                                            </li>
+                                            <option value="confirm" class="request-action-confirm" data-request-action="confirm">{% trans "Confirm for applicant" %}</option>
                                         {% endif %}
                                         {% if "unconfirm" in exhibition_request.review_actions %}
-                                            <li>
-                                                <a href="#" class="request-action-btn request-action-unconfirm" data-request-action="unconfirm" data-request-code="{{ exhibition_request.code }}">
-                                                    <i class="fa fa-circle-o"></i> {% trans "Move back to accepted" %}
-                                                </a>
-                                            </li>
+                                            <option value="unconfirm" class="request-action-unconfirm" data-request-action="unconfirm">{% trans "Move back to accepted" %}</option>
                                         {% endif %}
                                         {% if "reject" in exhibition_request.review_actions %}
-                                            <li>
-                                                <a href="#" class="request-action-btn request-action-reject" data-request-action="reject" data-request-code="{{ exhibition_request.code }}">
-                                                    <i class="fa fa-times"></i> {% trans "Reject" %}
-                                                </a>
-                                            </li>
+                                            <option value="reject" class="request-action-reject" data-request-action="reject">{% trans "Reject" %}</option>
                                         {% endif %}
                                         {% if "withdraw" in exhibition_request.review_actions %}
-                                            <li>
-                                                <a href="#" class="request-action-btn request-action-withdraw" data-request-action="withdraw" data-request-code="{{ exhibition_request.code }}">
-                                                    <i class="fa fa-undo"></i> {% trans "Withdraw" %}
-                                                </a>
-                                            </li>
+                                            <option value="withdraw" class="request-action-withdraw" data-request-action="withdraw">{% trans "Withdraw" %}</option>
                                         {% endif %}
                                         {% if "reopen" in exhibition_request.review_actions %}
-                                            <li>
-                                                <a href="#" class="request-action-btn request-action-reopen" data-request-action="reopen" data-request-code="{{ exhibition_request.code }}">
-                                                    <i class="fa fa-inbox"></i> {% trans "Reopen for review" %}
-                                                </a>
-                                            </li>
+                                            <option value="reopen" class="request-action-reopen" data-request-action="reopen">{% trans "Reopen for review" %}</option>
                                         {% endif %}
-                                    </ul>
+                                    </select>
                                 </div>
                             {% else %}
                                 <span data-request-state>{{ exhibition_request.get_state_display }}</span>

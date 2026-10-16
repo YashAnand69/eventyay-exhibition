@@ -209,12 +209,15 @@ def test_state_actions_stay_in_state_dropdown(event, settings, state):
     state_cell = row.select_one(".request-state-cell")
     assert state_cell["data-request-state-value"] == state
     assert [
-        item["data-request-action"] for item in state_cell.select(".dropdown-menu [data-request-action]")
+        item["data-request-action"]
+        for item in state_cell.select("select.required-status-dropdown option[data-request-action]")
     ] == actions
     assert not row.select_one("[data-request-actions-cell]").select("[data-request-action]")
     assert row.select_one("[data-request-actions-cell] a") is not None
     if actions:
-        toggle = state_cell.select_one('[data-toggle="dropdown"]')
-        assert toggle["aria-haspopup"] == "true"
-        assert toggle["aria-expanded"] == "false"
-        assert state_cell.select_one(".dropdown-menu") is not None
+        dropdown = state_cell.select_one(".required-status-wrapper select.required-status-dropdown")
+        assert dropdown["aria-label"]
+        assert dropdown.select_one("option[selected]")["value"] == ""
+        assert dropdown.select_one("option[selected]").text == proposal.get_state_display()
+        assert dropdown["data-current"] == state
+        assert not state_cell.select(".dropdown-menu, [data-toggle=dropdown]")

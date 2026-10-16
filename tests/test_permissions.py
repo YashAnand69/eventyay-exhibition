@@ -149,5 +149,5 @@ def test_review_only_user_has_no_state_dropdown(event, settings):
     row = BeautifulSoup(response.content, "html.parser").select_one(f'[data-request-row="{proposal.code}"]')
     assert row.select_one("[data-request-state]").text == proposal.get_state_display()
     assert not row.select("[data-request-action]")
-    assert not row.select("[data-toggle=dropdown]")
+    assert not row.select("select[data-request-state-select]")
     assert row.select_one("[data-request-actions-cell] a") is not None

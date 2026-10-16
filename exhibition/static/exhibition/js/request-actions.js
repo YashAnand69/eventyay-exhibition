@@ -20,19 +20,6 @@
             return
         }
 
-        window.jQuery(container).on('shown.bs.dropdown', '[data-request-state-actions]', function () {
-            this.classList.remove('dropup')
-            if (!window.matchMedia('(max-width: 767px)').matches) {
-                return
-            }
-            var menu = this.querySelector('.dropdown-menu').getBoundingClientRect()
-            var bounds = container.getBoundingClientRect()
-            var toggle = this.getBoundingClientRect()
-            if (menu.bottom > bounds.bottom && toggle.top - menu.height >= bounds.top) {
-                this.classList.add('dropup')
-            }
-        })
-
         var actionUrl = container.dataset.requestActionsUrl
         var csrfToken = getCookie('eventyay_csrftoken') || getCookie('csrftoken')
         var feedback = document.querySelector('[data-request-feedback]')
@@ -69,12 +56,12 @@
         }
 
         var actionConfig = {
-            approve: { icon: 'fa-check', cls: 'request-action-approve', variant: 'btn-success', label: i18n.labelApprove },
-            confirm: { icon: 'fa-check-circle', cls: 'request-action-confirm', variant: 'btn-success', label: i18n.labelConfirm },
-            unconfirm: { icon: 'fa-circle-o', cls: 'request-action-unconfirm', variant: '', label: i18n.labelUnconfirm },
-            reject: { icon: 'fa-times', cls: 'request-action-reject', variant: 'btn-danger', label: i18n.labelReject },
-            withdraw: { icon: 'fa-undo', cls: 'request-action-withdraw', variant: '', label: i18n.labelWithdraw },
-            reopen: { icon: 'fa-inbox', cls: 'request-action-reopen', variant: '', label: i18n.labelReopen },
+            approve: { cls: 'request-action-approve', label: i18n.labelApprove },
+            confirm: { cls: 'request-action-confirm', label: i18n.labelConfirm },
+            unconfirm: { cls: 'request-action-unconfirm', label: i18n.labelUnconfirm },
+            reject: { cls: 'request-action-reject', label: i18n.labelReject },
+            withdraw: { cls: 'request-action-withdraw', label: i18n.labelWithdraw },
+            reopen: { cls: 'request-action-reopen', label: i18n.labelReopen },
         }
 
         function checkboxes() {
@@ -168,42 +155,26 @@
             feedback.appendChild(alert)
         }
 
-        function buildActionButton(action, code) {
-            var config = actionConfig[action]
-            if (!config) {
-                return null
-            }
-            var button = document.createElement('a')
-            button.href = '#'
-            button.className = 'request-action-btn ' + config.cls
-            button.setAttribute('data-request-action', action)
-            button.setAttribute('data-request-code', code)
-            if (config.label) {
-                button.title = config.label
-            }
-            var icon = document.createElement('i')
-            icon.className = 'fa ' + config.icon
-            button.appendChild(icon)
-            button.appendChild(document.createTextNode(' ' + (config.label || '')))
-            return button
-        }
-
         function rebuildActions(row, result) {
-            var dropdown = row.querySelector('[data-request-state-actions]')
-            if (!dropdown) {
+            var select = row.querySelector('[data-request-state-select]')
+            if (!select) {
                 return
             }
-            var menu = dropdown.querySelector('.dropdown-menu')
-            menu.innerHTML = ''
+            select.innerHTML = ''
+            var state = new Option(result.state_display, '', true, true)
+            state.setAttribute('data-request-state', '')
+            select.appendChild(state)
+            select.dataset.current = result.state
             ;(result.actions || []).forEach(function (action) {
-                var button = buildActionButton(action, result.code)
-                if (button) {
-                    var item = document.createElement('li')
-                    item.appendChild(button)
-                    menu.appendChild(item)
+                var config = actionConfig[action]
+                if (config) {
+                    var option = new Option(config.label || '', action)
+                    option.className = config.cls
+                    option.setAttribute('data-request-action', action)
+                    select.appendChild(option)
                 }
             })
-            dropdown.querySelector('.dropdown-toggle').disabled = !menu.children.length
+            select.disabled = select.options.length === 1
         }
 
         function rebuildCheckbox(row, result) {
@@ -240,8 +211,8 @@
                     : selectedCodes(button.dataset.requestBulk).length === 0
                 button.disabled = busy || pending
             })
-            container.querySelectorAll('[data-request-action]').forEach(function (button) {
-                button.disabled = busy
+            container.querySelectorAll('[data-request-state-select]').forEach(function (select) {
+                select.disabled = busy || select.options.length === 1
             })
         }
 
@@ -359,20 +330,23 @@
             return Promise.resolve(window.confirm(message))
         }
 
-        container.addEventListener('click', function (event) {
-            var button = event.target.closest('[data-request-action]')
-            if (!button) {
+        container.addEventListener('change', function (event) {
+            var select = event.target.closest('[data-request-state-select]')
+            if (!select) {
                 return
             }
-            event.preventDefault()
-            if (button.disabled) {
+            var action = select.value
+            select.value = ''
+            if (select.disabled || !actionConfig[action]) {
                 return
             }
-            var action = button.dataset.requestAction
-            var code = button.dataset.requestCode
+            var code = select.dataset.requestCode
+            select.disabled = true
             requestConfirmation(action, confirmFor(action, false)).then(function (confirmed) {
                 if (confirmed) {
                     submitAction(action, [code])
+                } else {
+                    select.disabled = false
                 }
             })
         })

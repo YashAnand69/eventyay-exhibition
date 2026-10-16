@@ -113,74 +113,32 @@
     background: #df8a13;
 }
 
-/* Match the state and action colors throughout the request workflow. */
-.request-state-cell [data-request-state-actions] button.btn.dropdown-toggle {
-    color: #fff;
-    background: #666;
-    border-color: #666;
+/* Reuse the exhibitor form's native required/optional control. */
+.request-state-select-wrapper,
+.request-state-select-wrapper select.required-status-dropdown {
+    width: auto;
+    max-width: none;
 }
 
-.request-state-cell[data-request-state-value="submitted"] [data-request-state-actions] button.btn.dropdown-toggle {
-    background: #966000;
-    border-color: #966000;
-}
-
-.request-state-cell[data-request-state-value="accepted"] [data-request-state-actions] button.btn.dropdown-toggle,
-.request-state-cell[data-request-state-value="confirmed"] [data-request-state-actions] button.btn.dropdown-toggle {
-    background: #167d30;
-    border-color: #167d30;
-}
-
-.request-state-cell[data-request-state-value="rejected"] [data-request-state-actions] button.btn.dropdown-toggle {
-    background: #db2828;
-    border-color: #db2828;
-}
-
-.request-state-cell [data-request-state-actions] button.btn.dropdown-toggle:hover,
-.request-state-cell [data-request-state-actions] button.btn.dropdown-toggle:focus,
-.request-state-cell [data-request-state-actions].open button.btn.dropdown-toggle {
-    color: #fff;
-    filter: brightness(0.9);
-}
-
-.request-state-cell .dropdown-menu .request-action-btn {
-    border: 0;
-    background: transparent;
-}
-
-.request-state-cell .dropdown-menu .request-action-approve,
-.request-state-cell .dropdown-menu .request-action-confirm {
-    color: #167d30;
-}
-
-.request-state-cell .dropdown-menu .request-action-reject {
-    color: #cf2525;
-}
-
-.request-state-cell .dropdown-menu .request-action-unconfirm,
-.request-state-cell .dropdown-menu .request-action-withdraw {
+.request-state-select-wrapper select.required-status-dropdown {
     color: #767676;
+    border-color: currentColor;
+    background-color: #fff;
 }
 
-.request-state-cell .dropdown-menu .request-action-reopen {
-    color: #17649e;
+.request-state-select-wrapper select[data-current="submitted"] {
+    color: #2185d0;
 }
 
-.request-state-cell .dropdown-menu .request-action-btn:hover,
-.request-state-cell .dropdown-menu .request-action-btn:focus {
-    background: #f5f5f5;
+.request-state-select-wrapper select[data-current="accepted"],
+.request-state-select-wrapper select[data-current="confirmed"] {
+    color: #21ba45;
 }
 
-.request-state-cell .dropdown-menu .request-action-unconfirm:hover,
-.request-state-cell .dropdown-menu .request-action-unconfirm:focus,
-.request-state-cell .dropdown-menu .request-action-withdraw:hover,
-.request-state-cell .dropdown-menu .request-action-withdraw:focus {
-    background: #767676;
-    color: #fff;
+.request-state-select-wrapper select[data-current="rejected"] {
+    color: #db2828;
 }
 
-.request-state-cell .dropdown-menu .request-action-reopen:hover,
-.request-state-cell .dropdown-menu .request-action-reopen:focus {
-    background: #17649e;
-    color: #fff;
+.request-state-select-wrapper select option {
+    background-color: #fff;
 }
