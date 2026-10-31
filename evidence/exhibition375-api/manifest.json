@@ -1,0 +1,11 @@
+{
+  "baseline": "17d298337846c83c3e9cc2b14c04fdb200d895d6",
+  "fixed": "3cd2e6ea898bce0e12672c4b33105d2d97f7f8f7",
+  "production_source_matches_git": true,
+  "video_sha256": "bf28b3637db5479463945fab5029cf58ce3cb268a1ae7871c47a11aa2b2aa0fd",
+  "video_duration_seconds": 27.52,
+  "baseline_results": "1 failed (omitted), 3 passed",
+  "fixed_results": "4 passed",
+  "execution": "Django HTTP-client via real production URL/auth/session, PostgreSQL, Redis; no live network API/browser application UI claim",
+  "viewer": "Browser live subprocess output viewer; logging boilerplate omitted from display, raw execution logs retained"
+}

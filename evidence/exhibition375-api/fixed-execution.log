@@ -1,0 +1,40 @@
+Loading configuration from: 
+['../../../../work/eventyay-speaker-calendar-oct30/app/eventyay/config/eventyay.
+testing.toml']
+INFO 2026-10-31T09:28:40Z eventyay.core: config.loaded datetime=2026-10-31T09:28:40Z component=core outcome=success action=config.loaded
+INFO 2026-10-31T09:28:43Z eventyay.core: request.start datetime=2026-10-31T09:28:43Z component=core outcome=success action=request.start request_id=044e70b0546547b19fbfbddbcd24591d
+INFO 2026-10-31T09:28:43Z eventyay.core: request.end datetime=2026-10-31T09:28:43Z component=core outcome=success action=request.end user_id=767 request_id=044e70b0546547b19fbfbddbcd24591d duration_ms=22 status=200 route=plugins:exhibition:lead-update
+
+CASE: omitted
+POST /api/v1/event/test-organizer/test-event/exhibitors/lead/attendee-code/update
+JSON: {"note": "Call next week"}
+HTTP 200 | Stored note: Call next week | Stored tags: ['vip']
+Expected stored tags: ['vip']
+.INFO 2026-10-31T09:28:43Z eventyay.core: request.start datetime=2026-10-31T09:28:43Z component=core outcome=success action=request.start request_id=bf4e70e441d541768197e17754ceaca1
+INFO 2026-10-31T09:28:43Z eventyay.core: request.end datetime=2026-10-31T09:28:43Z component=core outcome=success action=request.end user_id=768 request_id=bf4e70e441d541768197e17754ceaca1 duration_ms=16 status=200 route=plugins:exhibition:lead-update
+
+CASE: None
+POST /api/v1/event/test-organizer/test-event/exhibitors/lead/attendee-code/update
+JSON: {"note": "Call next week", "tags": null}
+HTTP 200 | Stored note: Call next week | Stored tags: ['vip']
+Expected stored tags: ['vip']
+.INFO 2026-10-31T09:28:43Z eventyay.core: request.start datetime=2026-10-31T09:28:43Z component=core outcome=success action=request.start request_id=302857141e4845ababa5e5bc7e3d675e
+INFO 2026-10-31T09:28:43Z eventyay.core: request.end datetime=2026-10-31T09:28:43Z component=core outcome=success action=request.end user_id=769 request_id=302857141e4845ababa5e5bc7e3d675e duration_ms=16 status=200 route=plugins:exhibition:lead-update
+
+CASE: []
+POST /api/v1/event/test-organizer/test-event/exhibitors/lead/attendee-code/update
+JSON: {"note": "Call next week", "tags": []}
+HTTP 200 | Stored note: Call next week | Stored tags: []
+Expected stored tags: []
+.INFO 2026-10-31T09:28:43Z eventyay.core: request.start datetime=2026-10-31T09:28:43Z component=core outcome=success action=request.start request_id=c40f20c4b5524a64a2b24ea7559d51ab
+INFO 2026-10-31T09:28:43Z eventyay.core: request.end datetime=2026-10-31T09:28:43Z component=core outcome=success action=request.end user_id=770 request_id=c40f20c4b5524a64a2b24ea7559d51ab duration_ms=18 status=200 route=plugins:exhibition:lead-update
+
+CASE: ['follow-up']
+POST /api/v1/event/test-organizer/test-event/exhibitors/lead/attendee-code/update
+JSON: {"note": "Call next week", "tags": ["follow-up"]}
+HTTP 200 | Stored note: Call next week | Stored tags: ['follow-up']
+Expected stored tags: ['follow-up']
+.
+4 passed, 5 warnings in 2.98s
+
+Actual pytest exit status: 0
